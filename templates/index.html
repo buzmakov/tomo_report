@@ -193,28 +193,34 @@
                 <p class="lead">
                     Теперь нужно провести реконструкцию различными методами.
                 </p>
+                <p class="text-warning">
+                    Внимание! Реконструкция нектороыми методами происходит довольно медленно.
+                    Дождитесь появления результата. Не жмите на кнопки много раз подряд!
+                </p>
             </div>
             <div class="span6">
                 <h3 class="text-center"> Восстановление методом SART (реализация А.Бузмакова)</h3>
-                <p style="text-align: center">
+                <p class="text-center text-info">Используется 2 итерации по всем проекциям, с параметром релаксации [0.8, 0.3]</p>
+                <p class='text-center'>
                     <button id='make-reconstruction-buzmakov' class="btn btn-large btn-primary" type="button">Восстановить</button>
                 </p>
                 <p style="text-align: center">
                     Результат восстановления можно забрать <a id='buzmakov-res-url' href='#'>здесь</a>.
                 </p>
-                <div style="text-align: center;">
+                <div class='text-center'>
                     <img id="buzmakov-image" src="#" style="text-align:center"/>
                 </div>
             </div>
             <div class="span6">
-                <h3 class="text-center"> Восстановление методом ART-Хаф (реализация В.Пруна)</h3>
-                <p style="text-align: center">
+                <h3 class="text-center"> Восстановление методом ART-Хафф (реализация В.Пруна)</h3>
+                <p class="text-center text-info">Используется 1000 итерации, чтобы это ни значило, с параметром релаксации 0.57</p>
+                <p class='text-center'>
                     <button id='make-reconstruction-prun' class="btn btn-large btn-primary" type="button">Восстановить</button>
                 </p>
-                <p style="text-align: center">
+                <p class='text-center'>
                     Результат восстановления можно забрать <a id='prun-res-url' href='#'>здесь</a>.
                 </p>
-                <div style="text-align: center;">
+                <div class='text-center'>
                     <img id="prun-image" src="#" style="text-align:center"/>
                 </div>
             </div>
