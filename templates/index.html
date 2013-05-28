@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Sticky footer &middot; Twitter Bootstrap</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+
+      /* Sticky footer styles
+      -------------------------------------------------- */
+
+      html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: #f5f5f5;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+        }
+      }
+
+
+
+      /* Custom page CSS
+      -------------------------------------------------- */
+      /* Not required for template or sticky footer method. */
+
+      #wrap > .container {
+        padding-top: 60px;
+      }
+      .container .credit {
+        margin: 20px 0;
+      }
+
+      code {
+        font-size: 80%;
+      }
+    </style>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="/static/ico/favicon.ico">
+  </head>
+
+  <body>
+
+
+    <!-- Part 1: Wrap all page content here -->
+    <div id="wrap">
+
+      <!-- Fixed navbar -->
+      <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+          <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#">Томо-онлайн</a>
+            <div class="nav-collapse collapse">
+              <ul class="nav">
+                <li class="active"><a href="/index.html">Home</a></li>
+                <li><a href="/about.html">About</a></li>
+{#                <li><a href="#contact">Contact</a></li>#}
+{#                <li class="dropdown">#}
+{#                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>#}
+{#                  <ul class="dropdown-menu">#}
+{#                    <li><a href="#">Action</a></li>#}
+{#                    <li><a href="#">Another action</a></li>#}
+{#                    <li><a href="#">Something else here</a></li>#}
+{#                    <li class="divider"></li>#}
+{#                    <li class="nav-header">Nav header</li>#}
+{#                    <li><a href="#">Separated link</a></li>#}
+{#                    <li><a href="#">One more separated link</a></li>#}
+{#                  </ul>#}
+{#                </li>#}
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Begin page content -->
+      <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <h1>Шаг 1. Создание или загрузка синограммы.</h1>
+                <p class="lead">
+                    Для начала процедуры томографической реконструкции необходимо загрузить исходные данные (синограммы).
+                    Их можно сгененрировать из фантома или загрузить файл.
+                </p>
+            </div>
+            <div class="span7" style="padding-right:20px; border-right: 1px solid #ccc;">
+                <h3> Сгенерировать синограмму.</h3>
+                <p class="lead">
+                    Генерируем фантом Шеппа-Логана с параметрами:
+                <table class='table table-bordered table-striped'>
+                    <tr>
+                        <td>
+                            Размер фантома в пикселях
+                        </td>
+                        <td>
+                            <div id="phantom-size-radio" class="btn-group" data-toggle="buttons-radio">
+                              <button type="button" class="btn">64</button>
+                              <button type="button" class="btn">128</button>
+                              <button type="button" class="btn">256</button>
+                              <button type="button" class="btn active">512</button>
+                              <button type="button" class="btn">1024</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Количество углов поворота (0-180 градусов)
+                        </td>
+                        <td>
+                            <div id="phantom-angles-radio" class="btn-group" data-toggle="buttons-radio">
+                              <button type="button" class="btn">45</button>
+                              <button type="button" class="btn">90</button>
+                              <button type="button" class="btn active">180</button>
+                              <button type="button" class="btn">360</button>
+                              <button type="button" class="btn">720</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                </p>
+                <p id='phantom-text' style="text-align: center">
+                    Буду создавать фантом 512 px. и 180 углов.
+                </p>
+                <p style="text-align: center">
+                    <button id='make-phantom' class="btn btn-large btn-primary" type="button">Смоделировать фантом</button>
+                </p>
+
+                <p style="text-align: center">
+                    Вот вам <a id='phantom-url' href='#'>фантом</a> и <a id='sinogramm-url' href='#'>синограмма</a>.
+                </p>
+
+            </div>
+            <div class="span4">
+                <h3> Загрузить синограмму.</h3>
+                <p>TODO: добавить описание формата данных.</p>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="span12">
+                <h3 class="text-center"> Вот такая синограмма получилась.</h3>
+                <div style="text-align: center;">
+                    <img id="sinogramm-image" src="#" style="text-align:center"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="page-header">
+                <h1>Шаг 2. Томографическая реконструкция.</h1>
+                <p class="lead">
+                    Теперь нужно провести реконструкцию различными методами.
+                </p>
+            </div>
+            <div class="span6">
+                <h3 class="text-center"> Восстановление методом SART (реализация А.Бузмакова)</h3>
+                <p style="text-align: center">
+                    <button id='make-reconstruction-buzmakov' class="btn btn-large btn-primary" type="button">Восстановить</button>
+                </p>
+                <p style="text-align: center">
+                    Результат восстановления можно забрать <a id='buzmakov-res-url' href='#'>здесь</a>.
+                </p>
+                <div style="text-align: center;">
+                    <img id="buzmakov-image" src="#" style="text-align:center"/>
+                </div>
+            </div>
+            <div class="span6">
+                <h3 class="text-center"> Восстановление методом ART-Хаф (реализация В.Пруна)</h3>
+                <p style="text-align: center">
+                    <button id='make-reconstruction-prun' class="btn btn-large btn-primary" type="button">Восстановить</button>
+                </p>
+                <p style="text-align: center">
+                    Результат восстановления можно забрать <a id='prun-res-url' href='#'>здесь</a>.
+                </p>
+                <div style="text-align: center;">
+                    <img id="prun-image" src="#" style="text-align:center"/>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div id="push"></div>
+    </div>
+
+    <div id="footer">
+      <div class="container">
+        <p class="muted credit">Проект создан Алексеем Бузмаковым при поддрержке Виктора Пруна и Марины Чукалиной. ИК РАН 2013.</p>
+      </div>
+    </div>
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <script>
+        var angles = '180';
+        var size = '512';
+        var sinogram_mode = 'phantom';
+
+        $('#phantom-size-radio button').click(function(){
+            size = $(this).html();
+            $('#phantom-text').text("Буду создавать фантом "+ size + ' px. и ' + angles + ' углов.');;
+        });
+
+        $('#phantom-angles-radio button').click(function(){
+            angles = $(this).html();
+            $('#phantom-text').text("Буду создавать фантом "+ size + ' px. и ' + angles + ' углов.');
+        });
+
+        $(function() {
+            $('#make-phantom').bind('click', function() {
+                $(this).addClass('disabled btn-danger');
+                  $("#sinogramm-image").hide();
+                  $.getJSON('{{url_for('bulid_phantom_and_sinogramm')}}', {
+                        size: size,
+                        angles: angles
+                  }, function(data) {
+                      $(this).addClass('disabled');
+                       $("#phantom-url").attr('href',data.phantom_file);
+                       $("#sinogramm-url").attr('href',data.sinogramm_file);
+                       $("#sinogramm-image").attr('src',data.sinogramm_image);
+                       sinogram_mode = 'phantom';
+                  }).done(function(){
+                        $("#sinogramm-image").show();
+                        $('#make-phantom').removeClass('disabled btn-danger');
+                        return false;
+                          });
+            });
+        });
+
+        $(function() {
+            $('#make-reconstruction-buzmakov').bind('click', function() {
+                  $("#buzmakov-image").hide();
+                  $(this).removeClass('btn-primary');
+                  $(this).addClass('disabled btn-danger');
+                  $(this).text('Восстанавливаю, я не завис, я думаю...');
+                  $.getJSON('{{url_for('reconstruct_buzmakov')}}', {
+                        size: size,
+                        angles: angles,
+                        sinogram_mode: sinogram_mode
+                  }, function(res) {
+                      $("#buzmakov-image").attr('src',res.image);
+                      $('#buzmakov-res-url').attr('href', res.link)
+                  }).done(function(){
+                      $('#buzmakov-image').show();
+                      $('#make-reconstruction-buzmakov').removeClass('disabled btn-danger');
+                      $('#make-reconstruction-buzmakov').addClass('btn-primary');
+                      $('#make-reconstruction-buzmakov').text('Восстановить');
+                      return false;
+                          })
+            });
+        });
+
+        $(function() {
+            $('#make-reconstruction-prun').bind('click', function() {
+                  $("#prun-image").hide();
+                  $(this).removeClass('btn-primary');
+                  $(this).addClass('disabled btn-danger');
+                  $(this).text('Восстанавливаю, я не завис, я думаю...');
+                  $.getJSON('{{url_for('reconstruct_prun')}}', {
+                        size: size,
+                        angles: angles,
+                        sinogram_mode: sinogram_mode
+                  }, function(res) {
+                      $("#prun-image").attr('src',res.image);
+                      $('#prun-res-url').attr('href', res.link)
+                  }).done(function(){
+                      $('#prun-image').show();
+                      $('#make-reconstruction-prun').removeClass('disabled btn-danger');
+                      $('#make-reconstruction-prun').addClass('btn-primary');
+                      $('#make-reconstruction-prun').text('Восстановить');
+                        return false;
+                      })
+            });
+        });
+
+        $(document).ready(function(){
+            $("#sinogramm-image").hide();
+            $("#buzmakov-image").hide();
+            $("#prun-image").hide();
+            $("#make-phantom").click();
+        });
+
+
+    </script>
+
+  </body>
+</html>
