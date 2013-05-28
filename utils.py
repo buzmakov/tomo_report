@@ -1,5 +1,4 @@
 #encoding: utf-8
-from Orange.misc.testing import _data_driven_cls_decorator
 import matplotlib
 # Force matplotlib to not use any Xwindows backend.
 matplotlib.use('Agg')
