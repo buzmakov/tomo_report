@@ -199,6 +199,7 @@
                 </p>
                 <p class="text-warning">
                     Внимание! Реконструкция нектороыми методами происходит довольно медленно.
+                    Если результат уже был посчитан ранее, то он будет загружен из кэша.
                     Дождитесь появления результата. Не жмите на кнопки много раз подряд!
                 </p>
             </div>
@@ -265,15 +266,19 @@
 
         $(function() {
             $('#make-phantom').bind('click', function() {
-                $(this).addClass('disabled btn-danger');
+                  $(this).addClass('disabled btn-danger');
                   $("#phantom-image").hide();
                   $("#sinogramm-image").hide();
+                  $("#buzmakov-image").hide();
+                  $("#prun-image").hide();
+                  $('#buzmakov-res-url').attr('href', '#');
+                  $('#prun-res-url').attr('href', '#');
                   $.getJSON('{{url_for('bulid_phantom_and_sinogramm')}}', {
                         size: size,
                         angles: angles
                   }, function(data) {
                       $(this).addClass('disabled');
-                       $("#phantom-url").attr('href',data.phantom_file);
+                       $("#phantom-url").attr('href',data.phantom_fil
                        $("#sinogramm-url").attr('href',data.sinogramm_file);
                        $("#phantom-image").attr('src',data.phantom_image);
                        $("#sinogramm-image").attr('src',data.sinogramm_image);
