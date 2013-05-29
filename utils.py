@@ -71,14 +71,17 @@ def generate_phantom_sinogram(size, nang):
 
 
 def reconstruct_buzmakov(nang, size):
-    angles = np.arange(0, 180, 180.0 / nang, dtype='float32')
+
     dir_name = os.path.join('.', get_strorage_directory(size, nang))
-    sinogramm = np.loadtxt(os.path.join(dir_name, 'sinogramm.txt'), dtype='float32')
-    res = sart(sinogramm, angles)
     res_name = os.path.join(dir_name, 'reconst_buzmakov.txt')
-    np.savetxt(res_name, res)
     image_name = os.path.join(dir_name, 'reconst_buzmakov.png')
-    imsave(image_name, res, cmap=plt.cm.Greys_r)
+
+    if not (os.path.exists(res_name) and os.path.exists(image_name)):
+        angles = np.arange(0, 180, 180.0 / nang, dtype='float32')
+        sinogramm = np.loadtxt(os.path.join(dir_name, 'sinogramm.txt'), dtype='float32')
+        res = sart(sinogramm, angles)
+        np.savetxt(res_name, res)
+        imsave(image_name, res, cmap=plt.cm.Greys_r)
 
     return {'image': image_name, 'res': res_name}
 
@@ -102,11 +105,14 @@ def generate_prun_config(data_directory):
 def reconstruct_prun(nang, size):
     dir_name = os.path.join('.', get_strorage_directory(size, nang))
     binary_name = os.path.abspath(os.path.join('.', 'prun_data', 'tomoreconstruct'))
-    generate_prun_config(dir_name)
-    p = subprocess.Popen([binary_name, 'config.yaml'], cwd=dir_name)
-    p.wait()
-    p = subprocess.Popen(['convert', 'result_result.tiff', 'result_result.png'], cwd=dir_name)
-    p.wait()
     image_name = os.path.join(dir_name, 'result_result.png')
     res_name = os.path.join(dir_name, 'result_result.txt')
+
+    if not (os.path.exists(image_name) and os.path.exists(res_name)):
+        generate_prun_config(dir_name)
+        p = subprocess.Popen([binary_name, 'config.yaml'], cwd=dir_name)
+        p.wait()
+        p = subprocess.Popen(['convert', 'result_result.tiff', 'result_result.png'], cwd=dir_name)
+        p.wait()
+
     return {'image': image_name, 'res': res_name}
