@@ -3,7 +3,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Sticky footer &middot; Twitter Bootstrap</title>
+    <title>Томография &middot; Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -180,7 +180,13 @@
 
 
         <div class="row">
-            <div class="span12">
+            <div class="span6">
+                <h3 class="text-center"> Вот такаой фантом.</h3>
+                <div style="text-align: center;">
+                    <img id="phantom-image" src="#" style="text-align:center"/>
+                </div>
+            </div>
+            <div class="span6">
                 <h3 class="text-center"> Вот такая синограмма получилась.</h3>
                 <div style="text-align: center;">
                     <img id="sinogramm-image" src="#" style="text-align:center"/>
@@ -262,6 +268,7 @@
         $(function() {
             $('#make-phantom').bind('click', function() {
                 $(this).addClass('disabled btn-danger');
+                  $("#phantom-image").hide();
                   $("#sinogramm-image").hide();
                   $.getJSON('{{url_for('bulid_phantom_and_sinogramm')}}', {
                         size: size,
@@ -270,10 +277,12 @@
                       $(this).addClass('disabled');
                        $("#phantom-url").attr('href',data.phantom_file);
                        $("#sinogramm-url").attr('href',data.sinogramm_file);
+                       $("#phantom-image").attr('src',data.phantom_image);
                        $("#sinogramm-image").attr('src',data.sinogramm_image);
                        sinogram_mode = 'phantom';
                   }).done(function(){
                         $("#sinogramm-image").show();
+                        $("#phantom-image").show();
                         $('#make-phantom').removeClass('disabled btn-danger');
                         return false;
                           });
@@ -328,6 +337,7 @@
 
         $(document).ready(function(){
             $("#sinogramm-image").hide();
+            $("#phantom-image").hide();
             $("#buzmakov-image").hide();
             $("#prun-image").hide();
             $("#make-phantom").click();

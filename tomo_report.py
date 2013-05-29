@@ -23,9 +23,10 @@ def bulid_phantom_and_sinogramm():
 
     res = utils.generate_phantom_sinogram(size, angles)
     phantom_file = res['phantom']
+    phantom_image = res['phantom_image']
     sinogramm_file = res['sinogramm']
     sinogramm_image = res['sinogramm_image']
-    return jsonify(phantom_file='/'+phantom_file,
+    return jsonify(phantom_file='/'+phantom_file, phantom_image='/'+phantom_image,
                    sinogramm_file='/'+sinogramm_file,sinogramm_image='/'+sinogramm_image)
 
 @app.route('/_reconstruct_buzmakov')
