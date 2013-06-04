@@ -42,24 +42,29 @@ class SijaxHandler(object):
                 return 'Nothing uploaded'
 
             file_type = file_data.content_type
-            file_size = len(file_data.read())
-            return 'Uploaded file %s (%s) - %sB' % (file_name, file_type, file_size)
+            data = file_data.read()
+            file_size = len(data)
+            return {'status': 'Uploaded file %s (%s) - %sB' % (file_name, file_type, file_size),
+                    'file_data': data}
 
-        html = dump_files()
+        df = dump_files()
+        html = df['status']
 
         obj_response.html('#%s' % container_id, html)
+        return df['file_data']
 
     @staticmethod
     def form_one_handler(obj_response, files, form_values):
-        SijaxHandler._dump_data(obj_response, files, form_values, 'form-sinogram-upload-response')
+        file_data = SijaxHandler._dump_data(obj_response, files, form_values, 'form-sinogram-upload-response')
         obj_response.reset_form()
         obj_response.html_append('#form-sinogram-upload-response',
                                  '<br>Генерирую изображения синограмм.')
         yield obj_response
 
-        from time import sleep
-        sleep(2)
-        obj_response.html_append('#form-sinogram-upload-response', '<br />Finished!')
+        sinogramm_file = utils.save_upload_sinogrm(file_data)
+        image_name = utils.render_uploaded_sinogramm(sinogramm_file)
+
+        obj_response.html_append('#form-sinogram-upload-response', '<br />Готово!')
 
 
 @app.route('/',methods=['GET', 'POST'])

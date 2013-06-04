@@ -6,10 +6,13 @@ matplotlib.use('Agg')
 import numpy as np
 import pylab as plt
 
+import errno
 import sys
 import os
 import subprocess
 import yaml
+import hashlib
+from werkzeug.utils import secure_filename
 
 sys.path.insert(0, os.path.join('..', 'fastlib'))
 import fastlib
@@ -18,8 +21,13 @@ from fastlib.imageprocessing.ispmd import rotate_square, project
 from fastlib.tomography.sart import sart
 
 
-def get_strorage_directory(size, nang):
-    return os.path.join('static', 'data', 'sh_l_size_{0}_ang_{1}'.format(size, nang))
+def get_strorage_directory(size=None, nang=None, subdir=None):
+    path = os.path.join('.', 'static', 'data')
+    if not (size is None and nang is None):
+        path = os.path.join(path, 'sh_l_size_{0}_ang_{1}'.format(size, nang))
+    if not subdir is None:
+        path = os.path.join(path, subdir)
+    return path
 
 
 def imsave(fname, arr, vmin=None, vmax=None, cmap=None, format=None, origin=None):
@@ -71,7 +79,6 @@ def generate_phantom_sinogram(size, nang):
 
 
 def reconstruct_buzmakov(nang, size):
-
     dir_name = os.path.join('.', get_strorage_directory(size, nang))
     res_name = os.path.join(dir_name, 'reconst_buzmakov.txt')
     image_name = os.path.join(dir_name, 'reconst_buzmakov.png')
@@ -116,3 +123,28 @@ def reconstruct_prun(nang, size):
         p.wait()
 
     return {'image': image_name, 'res': res_name}
+
+
+def save_upload_sinogrm(file_data):
+    hash = hashlib.sha1(file_data).hexdigest()
+    dir_name = get_strorage_directory(subdir=hash)
+
+    try:
+        os.makedirs(dir_name)
+    except OSError as exc: # Python >2.5
+        if exc.errno == errno.EEXIST and os.path.isdir(dir_name):
+            pass
+        else:
+            raise
+
+    sinogramm_file = os.path.join(dir_name, 'sinogramm.txt')
+    with open(sinogramm_file, 'w') as f:
+        f.write(file_data)
+
+    return sinogramm_file
+
+def render_uploaded_sinogramm(sinogramm_file):
+    image_name = os.path.splitext(sinogramm_file)[0]+'.png'
+    data = np.loadtxt(sinogramm_file)
+    imsave(image_name, data, cmap=plt.cm.Greys_r)
+    return image_name
