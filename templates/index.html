@@ -174,7 +174,7 @@
             <div class="span5">
                 <h3> Загрузить синограмму.</h3>
                 <p>TODO: добавить описание формата данных.</p>
-                <form>
+                <form id='form-sinogram-upload' name='form-sinogram-upload' method="post" enctype="multipart/form-data">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="input-append">
                         <div class="uneditable-input span3">
@@ -184,14 +184,15 @@
                         <span class="btn btn-file">
                             <span class="fileupload-new">Select file</span>
                             <span class="fileupload-exists">Change</span>
-                            <input type="file" />
+                            <input type="file" name="file"/>
                         </span>
                         <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                        <button type="submit" class="btn">Upload</button>
+                        <input type="submit" class="btn" value="Upload">Upload</input>
                       </div>
 
                     </div>
                 </form>
+                <div id='form-sinogram-upload-response'></div>
 
             </div>
         </div>
@@ -273,6 +274,13 @@
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
     <script src="/static/js/bootstrap-fileupload.min.js"></script>
+
+    <script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
+    <script type="text/javascript" src="/static/js/sijax/sijax_upload.js"></script>
+    <script type="text/javascript">
+        {{ g.sijax.get_js()|safe }}
+        {{ form_init_js|safe }}
+    </script>
 
     <script>
         var angles = '180';
