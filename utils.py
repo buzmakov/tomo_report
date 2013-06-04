@@ -140,6 +140,25 @@ def reconstruct_prun(nang, size):
 
     return {'image': image_name, 'res': res_name}
 
+def reconstruct_prun_id(sinogramm_id):
+    dir_name = get_strorage_directory(sub_dir=sinogramm_id)
+    binary_name = os.path.abspath(os.path.join('.', 'prun_data', 'tomoreconstruct'))
+    image_name = os.path.join(dir_name, 'result_result.png')
+    res_name = os.path.join(dir_name, 'result_result.txt')
+
+    if not (os.path.exists(image_name) and os.path.exists(res_name)):
+        sinogramm = np.loadtxt(os.path.join(dir_name, 'sinogramm.txt'), dtype='float32')
+        nang = sinogramm.shape[1]
+        angles = np.arange(0, 180, 180.0 / nang, dtype='float32')
+        angels_file = os.path.join(dir_name, 'ang.txt')
+        np.savetxt(angels_file, angles,delimiter='\n')
+        generate_prun_config(dir_name)
+        p = subprocess.Popen([binary_name, 'config.yaml'], cwd=dir_name)
+        p.wait()
+        p = subprocess.Popen(['convert', 'result_result.tiff', 'result_result.png'], cwd=dir_name)
+        p.wait()
+
+    return {'image': image_name, 'res': res_name}
 
 def save_upload_sinogram(file_data):
     file_id = hashlib.sha1(file_data).hexdigest()

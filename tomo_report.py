@@ -134,7 +134,9 @@ def reconstruct_prun():
         angles = request.args.get('angles', -1, type=int)
         res = utils.reconstruct_prun(angles, size)
         return jsonify(image=res['image'], status='', link=res['res'])
-
+    elif r['sinogram_mode'] == u'user':
+        res = utils.reconstruct_prun_id(r['sinogram_id'])
+        return jsonify(image=res['image'], status='', link=res['res'])
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5510)
