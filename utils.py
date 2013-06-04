@@ -21,13 +21,13 @@ from fastlib.imageprocessing.ispmd import rotate_square, project
 from fastlib.tomography.sart import sart
 
 
-def get_strorage_directory(size=None, nang=None, subdir=None):
-    path = os.path.join('.', 'static', 'data')
+def get_strorage_directory(size=None, nang=None, sub_dir=None):
+    dir_path = os.path.join('.', 'static', 'data')
     if not (size is None and nang is None):
-        path = os.path.join(path, 'sh_l_size_{0}_ang_{1}'.format(size, nang))
-    if not subdir is None:
-        path = os.path.join(path, subdir)
-    return path
+        dir_path = os.path.join(dir_path, 'sh_l_size_{0}_ang_{1}'.format(size, nang))
+    if not sub_dir is None:
+        dir_path = os.path.join(dir_path, sub_dir)
+    return dir_path
 
 
 def imsave(fname, arr, vmin=None, vmax=None, cmap=None, format=None, origin=None):
@@ -50,7 +50,7 @@ def genrate_sinogam(image, angles):
 
 
 def generate_phantom_sinogram(size, nang):
-    dir_name = os.path.join('.', get_strorage_directory(size, nang))
+    dir_name = get_strorage_directory(size, nang)
     phantom_image = os.path.join(dir_name, 'phantom.png')
     sinogramm_image = os.path.join(dir_name, 'sinogramm.png')
     phantom_file = os.path.join(dir_name, 'phantom.txt')
@@ -79,13 +79,29 @@ def generate_phantom_sinogram(size, nang):
 
 
 def reconstruct_buzmakov(nang, size):
-    dir_name = os.path.join('.', get_strorage_directory(size, nang))
+    dir_name = get_strorage_directory(size, nang)
     res_name = os.path.join(dir_name, 'reconst_buzmakov.txt')
     image_name = os.path.join(dir_name, 'reconst_buzmakov.png')
 
     if not (os.path.exists(res_name) and os.path.exists(image_name)):
         angles = np.arange(0, 180, 180.0 / nang, dtype='float32')
         sinogramm = np.loadtxt(os.path.join(dir_name, 'sinogramm.txt'), dtype='float32')
+        res = sart(sinogramm, angles)
+        np.savetxt(res_name, res)
+        imsave(image_name, res, cmap=plt.cm.Greys_r)
+
+    return {'image': image_name, 'res': res_name}
+
+
+def reconstruct_buzmakov_id(sinogramm_id):
+    dir_name = get_strorage_directory(sub_dir=sinogramm_id)
+    res_name = os.path.join(dir_name, 'reconst_buzmakov.txt')
+    image_name = os.path.join(dir_name, 'reconst_buzmakov.png')
+
+    if not (os.path.exists(res_name) and os.path.exists(image_name)):
+        sinogramm = np.loadtxt(os.path.join(dir_name, 'sinogramm.txt'), dtype='float32')
+        nang = sinogramm.shape[1]
+        angles = np.arange(0, 180, 180.0 / nang, dtype='float32')
         res = sart(sinogramm, angles)
         np.savetxt(res_name, res)
         imsave(image_name, res, cmap=plt.cm.Greys_r)
@@ -110,7 +126,7 @@ def generate_prun_config(data_directory):
 
 
 def reconstruct_prun(nang, size):
-    dir_name = os.path.join('.', get_strorage_directory(size, nang))
+    dir_name = get_strorage_directory(size, nang)
     binary_name = os.path.abspath(os.path.join('.', 'prun_data', 'tomoreconstruct'))
     image_name = os.path.join(dir_name, 'result_result.png')
     res_name = os.path.join(dir_name, 'result_result.txt')
@@ -125,9 +141,9 @@ def reconstruct_prun(nang, size):
     return {'image': image_name, 'res': res_name}
 
 
-def save_upload_sinogrm(file_data):
-    hash = hashlib.sha1(file_data).hexdigest()
-    dir_name = get_strorage_directory(subdir=hash)
+def save_upload_sinogram(file_data):
+    file_id = hashlib.sha1(file_data).hexdigest()
+    dir_name = get_strorage_directory(sub_dir=file_id)
 
     try:
         os.makedirs(dir_name)
@@ -141,10 +157,11 @@ def save_upload_sinogrm(file_data):
     with open(sinogramm_file, 'w') as f:
         f.write(file_data)
 
-    return sinogramm_file
+    return file_id, sinogramm_file
+
 
 def render_uploaded_sinogramm(sinogramm_file):
-    image_name = os.path.splitext(sinogramm_file)[0]+'.png'
+    image_name = os.path.splitext(sinogramm_file)[0] + '.png'
     data = np.loadtxt(sinogramm_file)
     imsave(image_name, data, cmap=plt.cm.Greys_r)
     return image_name

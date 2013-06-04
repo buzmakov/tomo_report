@@ -59,12 +59,21 @@ class SijaxHandler(object):
         obj_response.reset_form()
         obj_response.html_append('#form-sinogram-upload-response',
                                  '<br>Генерирую изображения синограмм.')
+        obj_response.script('$("#phantom-image").hide()')
+        obj_response.script('$("#buzmakov-image").hide()')
+        obj_response.script('$("#prun-image").hide()')
+
         yield obj_response
 
-        sinogramm_file = utils.save_upload_sinogrm(file_data)
+        sinogramm_id, sinogramm_file = utils.save_upload_sinogram(file_data)
         image_name = utils.render_uploaded_sinogramm(sinogramm_file)
 
+        obj_response.attr("#sinogramm-image",'src', '/'+image_name)
+        obj_response.script("sinogram_mode = 'user'")
+        obj_response.script("sinogram_id = '{}'".format(sinogramm_id))
+
         obj_response.html_append('#form-sinogram-upload-response', '<br />Готово!')
+
 
 
 @app.route('/',methods=['GET', 'POST'])
@@ -111,6 +120,9 @@ def reconstruct_buzmakov():
         size = request.args.get('size', -1, type=int)
         angles = request.args.get('angles', -1, type=int)
         res = utils.reconstruct_buzmakov(angles, size)
+        return jsonify(image=res['image'], status='', link=res['res'])
+    elif r['sinogram_mode'] == u'user':
+        res = utils.reconstruct_buzmakov_id(r['sinogram_id'])
         return jsonify(image=res['image'], status='', link=res['res'])
 
 

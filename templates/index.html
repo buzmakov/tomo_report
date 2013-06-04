@@ -285,7 +285,8 @@
     <script>
         var angles = '180';
         var size = '512';
-        var sinogram_mode = 'phantom';
+        var sinogram_mode = '';
+        var sinogram_id ='';
 
         $('#phantom-size-radio button').click(function(){
             size = $(this).html();
@@ -334,7 +335,9 @@
                   $.getJSON('{{url_for('reconstruct_buzmakov')}}', {
                         size: size,
                         angles: angles,
-                        sinogram_mode: sinogram_mode
+                        sinogram_mode: sinogram_mode,
+                        sinogram_id: sinogram_id
+
                   }, function(res) {
                       $("#buzmakov-image").attr('src',res.image);
                       $('#buzmakov-res-url').attr('href', res.link)
@@ -357,7 +360,8 @@
                   $.getJSON('{{url_for('reconstruct_prun')}}', {
                         size: size,
                         angles: angles,
-                        sinogram_mode: sinogram_mode
+                        sinogram_mode: sinogram_mode,
+                        sinogram_id: sinogram_id
                   }, function(res) {
                       $("#prun-image").attr('src',res.image);
                       $('#prun-res-url').attr('href', res.link)
@@ -372,6 +376,7 @@
         });
 
         $(document).ready(function(){
+            sinogram_mode = 'phantom';
             $("#sinogramm-image").hide();
             $("#phantom-image").hide();
             $("#buzmakov-image").hide();
