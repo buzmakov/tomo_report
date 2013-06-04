@@ -89,7 +89,7 @@ def reconstruct_buzmakov(nang, size):
 def generate_prun_config(data_directory):
     data = {'sinogramm': 'sinogramm.txt',
             'angles': 'ang.txt',
-            'iterations': 1000,
+            'iterations': 400,
             'relaxation': 0.57,
             'reg_method': 'RM_RAW',
             'reg_params': [0.1, 0.001],
