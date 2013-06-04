@@ -58,7 +58,7 @@ class SijaxHandler(object):
         file_data = SijaxHandler._dump_data(obj_response, files, form_values, 'form-sinogram-upload-response')
         obj_response.reset_form()
         obj_response.html_append('#form-sinogram-upload-response',
-                                 '<br>Генерирую изображения синограмм.')
+                                 '<br>Генерирую изображения синограммы.')
         obj_response.script('$("#phantom-image").hide()')
         obj_response.script('$("#buzmakov-image").hide()')
         obj_response.script('$("#prun-image").hide()')

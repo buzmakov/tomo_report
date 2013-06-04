@@ -173,7 +173,10 @@
             </div>
             <div class="span5">
                 <h3> Загрузить синограмму.</h3>
-                <p>TODO: добавить описание формата данных.</p>
+                <p> Синограмма - текстовый файл с числмаи, 1 сторка - 1 проекция, разделитель - пробел или таб.
+                <br> Число сток - число уголов поворота в интервале [0,180), углы поворота равномерно распределены в интервале, отсечка 180 градусов не нужна.
+                    Т.е. если в файле 180 трок то значения углов будет 0,1,2,...,178,179.
+                </p>
                 <form id='form-sinogram-upload' name='form-sinogram-upload' method="post" enctype="multipart/form-data">
                     <div class="fileupload fileupload-new" data-provides="fileupload">
                       <div class="input-append">
